@@ -165,24 +165,24 @@ int main(int argc, char *argv[])
             n_way_set_associative_cache_access(&n_cache, address);
         }
         /*Print out the results*/
-        printf("\n==================================\n");
-        printf("Cache type:    %d N-Way Cache\n", WAY_SIZE);
-				printf("Block Size:		%d bytes\n", BLOCK_SIZE);
-				printf("Cache Size:		%d KB\n", (CACHE_SIZE / 1024));
-				printf("File:					%s\n", trace_file_name);
-        printf("==================================\n");
-        printf("Cache Hits:    %d\n", n_cache.hits);
-        printf("Cache Misses:  %d\n", n_cache.misses);
-        printf("\n");
+        fprintf(outfp,"\n==================================\n");
+        fprintf(outfp,"Cache type:    %d N-Way Cache\n", WAY_SIZE);
+				fprintf(outfp,"Block Size:		%d bytes\n", BLOCK_SIZE);
+				fprintf(outfp,"Cache Size:		%d KB\n", (CACHE_SIZE / 1024));
+				fprintf(outfp,"File:					%s\n", trace_file_name);
+        fprintf(outfp,"==================================\n");
+        fprintf(outfp,"Cache Hits:    %d\n", n_cache.hits);
+        fprintf(outfp,"Cache Misses:  %d\n", n_cache.misses);
+        fprintf(outfp,"\n");
 
         /* Manipulated Code to calculate hit rate & miss rate of a cache [PART 2]*/
         total = n_cache.misses + n_cache.hits;
         cache_hit_rate = n_cache.hits / total;
         cache_miss_rate = n_cache.misses / total;
 
-        printf("Hit Rate:       %% %.2f Percent\n", cache_hit_rate * 100);
-        printf("Miss Rate:      %% %.2f Percent\n", cache_miss_rate * 100);
-        printf("\n");
+        fprintf(outfp,"Hit Rate:       %% %.2f Percent\n", cache_hit_rate * 100);
+        fprintf(outfp,"Miss Rate:      %% %.2f Percent\n", cache_miss_rate * 100);
+        fprintf(outfp,"\n");
 
     }
 
