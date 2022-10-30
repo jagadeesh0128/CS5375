@@ -12,6 +12,7 @@ int main(int argc, char *argv[])
     }
 
 #ifdef DBG
+    //printing information to the user
     printf("BLOCK SIZE = %d Bytes\n", BLOCK_SIZE);
     printf("%d-WAY\n", WAY_SIZE);
     printf("CACHE SIZE = %d Bytes\n", CACHE_SIZE);
@@ -27,7 +28,7 @@ int main(int argc, char *argv[])
     FILE *fp;
 
 
-    /* Initialization */
+    //intializing all the important variables
     for (int i=0; i<NUM_BLOCKS; i++) {
         d_cache.valid_field[i] = 0;
         d_cache.dirty_field[i] = 0;
@@ -36,7 +37,7 @@ int main(int argc, char *argv[])
     d_cache.hits = 0;
     d_cache.misses = 0;
 
-/* Opening the memory trace file */
+    //working with memory trace file
     fp = fopen(trace_file_name, "r");
 
     if (strncmp(argv[1], "direct", 6)==0) { /* Simulating direct-mapped cache */
@@ -54,9 +55,12 @@ int main(int argc, char *argv[])
         double hitRatio;
         double missRatio;
         double totalHits;
+        //finding total hits
         totalHits = (d_cache.hits + d_cache.misses);
+        //finding the hit ratio
         hitRatio = (d_cache.hits/totalHits);
         printf("Cache Hits ratio: %.2f \n",hitRatio);
+        //finding miss ratio: taken out from hit ratio
         missRatio = 1 - hitRatio;
         printf("Cache Miss ratio: %.2f \n",missRatio);
         printf("\n");
@@ -69,8 +73,7 @@ int main(int argc, char *argv[])
 }
 
 uint64_t convert_address(char memory_addr[])
-/* Converts the physical 32-bit address in the trace file to the "binary" \\
- * (a uint64 that can have bitwise operations on it) */
+    //converting to binary address
 {
     uint64_t binary = 0;
     int i = 0;
@@ -103,6 +106,7 @@ uint64_t convert_address(char memory_addr[])
     }
 
 #ifdef DBG
+    //after conversting to binary
     printf("%s converted to %llu\n", memory_addr, binary);
 #endif
     return binary;
