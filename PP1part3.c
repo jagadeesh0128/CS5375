@@ -75,6 +75,7 @@ uint64_t convert_address(char memory_addr[])
     return binary;
 }
 
+// checking wether data exsists in cacheL1
 int isDataExistsInCacheL1(uint64_t address, int nway, struct L1Cache *l1)
 {
     //cache data L1
@@ -95,6 +96,7 @@ int isDataExistsInCacheL1(uint64_t address, int nway, struct L1Cache *l1)
     }
     return 0;
 }
+// checking wether data exsists in cacheL1
 int isDataExistsInCacheL2(uint64_t address, int nway, struct L2Cache *l2)
 {
     //cache data L2
@@ -115,6 +117,7 @@ int isDataExistsInCacheL2(uint64_t address, int nway, struct L2Cache *l2)
     }
     return 0;
 }
+// Insertng data into L1 cache
 void insertDataInL1Cache(uint64_t address, int nway, struct L1Cache *l1)
 {
     //inserting data into L1 cache
@@ -160,6 +163,8 @@ void insertDataInL1Cache(uint64_t address, int nway, struct L1Cache *l1)
         l1->tag_field[randomIndex] = tag;
     }
 }
+
+// Insertng data into L1 cache
 void insertDataInL2Cache(uint64_t address, int nway, struct L2Cache *l2)
 {
     //inserting data into L2 cache
@@ -246,6 +251,7 @@ int main(int argc, char *argv[])
         while (fgets(mem_request, 20, fp) != NULL)
         {
             address = convert_address(mem_request);
+            //calling isDataExistsInCacheL1 to check wether data exists in l1cache
             int dataInL1 = isDataExistsInCacheL1(address, l1nway, &l1);
             if (dataInL1 == 1)
             {
@@ -255,6 +261,7 @@ int main(int argc, char *argv[])
             else
             {
                 l1.misses++;
+                 //calling isDataExistsInCacheL2 to check wether data exists in l2cache
                 int dataInL2 = isDataExistsInCacheL2(address, l2nway, &l2);
                 if (dataInL2)
                 {
@@ -263,24 +270,30 @@ int main(int argc, char *argv[])
                 else
                 {
                     l2.misses++;
+                     //calling insertDataInL2Cache to insert data in l2cache
                     insertDataInL2Cache(address, l2nway, &l2);
                 }
+                //calling insertDataInL1Cache to insert data in l1cache
                 insertDataInL1Cache(address, l1nway, &l1);
             }
         }
         printf("\n==================================\n");
         printf("Cache type:     l1\n");
         printf("==================================\n");
+        // Cache hits and misses of l1
         printf("Cache Hits:    %d\n", l1.hits);
         printf("Cache Misses:  %d\n", l1.misses);
+        // Cache hit and miss ratio of l1
         printf("Cache Hit Rate : %0.3f%%\n", ((float)l1.hits / (float)(l1.hits + l1.misses)) * 100);
         printf("Cache Miss Rate : %0.3f%%\n", ((float)l1.misses / (float)(l1.hits + l1.misses)) * 100);
         printf("\n");
         printf("\n==================================\n");
         printf("Cache type:     l2\n");
         printf("==================================\n");
+        // Cache hits and misses of l2
         printf("Cache Hits:    %d\n", l2.hits);
         printf("Cache Misses:  %d\n", l2.misses);
+        // Cache hit and miss ratio of l2
         printf("Cache Hit Rate : %0.6f%%\n", ((float)l2.hits / (float)(l2.hits + l2.misses)) * 100);
         printf("Cache Miss Rate : %0.6f%%\n", ((float)l2.misses / (float)(l2.hits + l2.misses)) * 100);
         printf("\n");
