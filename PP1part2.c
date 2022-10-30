@@ -15,8 +15,7 @@
 char *trace_file_name;
 
 uint64_t convert_address(char memory_addr[])
-/* Converts the physical 32-bit address in the trace file to the "binary" \\
- * (a uint64 that can have bitwise operations on it) */
+//converting into binary address from physical address
 {
     uint64_t binary = 0;
     int i = 0;
@@ -65,7 +64,9 @@ uint64_t convert_address(char memory_addr[])
 
 void excecuteCache(int totalNumberOfBlocks, int nway, int blockSize)
 {
+    //intializing number of sets to be used
     int numberOfSets = totalNumberOfBlocks / nway;
+    //created structure direct mapped cached
     struct direct_mapped_cache
     {
         unsigned valid_field[totalNumberOfBlocks]; /* Valid field */
@@ -76,7 +77,7 @@ void excecuteCache(int totalNumberOfBlocks, int nway, int blockSize)
         int misses;                                /* Miss count */
     };
     struct direct_mapped_cache d_cache;
-    /* Initialization */
+    // Initialization 
     for (int i = 0; i < totalNumberOfBlocks; i++)
     {
         d_cache.valid_field[i] = 0;
@@ -93,6 +94,7 @@ void excecuteCache(int totalNumberOfBlocks, int nway, int blockSize)
 
     while (fgets(mem_request, 20, fp) != NULL)
     {
+        //intialization
         address = convert_address(mem_request);
         uint64_t block_addr = address >> (unsigned)log2(blockSize);
         int setNumber = block_addr % numberOfSets;
@@ -111,7 +113,7 @@ void excecuteCache(int totalNumberOfBlocks, int nway, int blockSize)
         {
             i++;
             if (d_cache.valid_field[loopIndex] && d_cache.tag_field[loopIndex] == tag)
-            { /* Cache hit */
+            { //cache hits
                 d_cache.hits += 1;
                 hitMade = 1;
                 break;
@@ -127,6 +129,7 @@ void excecuteCache(int totalNumberOfBlocks, int nway, int blockSize)
 
         if (hitMade == 0)
         {
+            //misses
             d_cache.misses += 1;
             if (isAnySpaceEmpty > 0)
             {
@@ -148,7 +151,6 @@ void excecuteCache(int totalNumberOfBlocks, int nway, int blockSize)
             else
             {
                 // pick a random index and replace
-
                 int randomIndex = (rand() % (endIndex - startIndex + 1)) + startIndex;
                 d_cache.valid_field[randomIndex] = 1;
                 d_cache.tag_field[randomIndex] = tag;
@@ -156,6 +158,7 @@ void excecuteCache(int totalNumberOfBlocks, int nway, int blockSize)
         }
     }
     printf("==================================\n");
+    //printing number of cache hits and chace misses and percentage 
     printf("Number of Cache Hits:    %d\n", d_cache.hits);
     printf("Number of Cache Misses:  %d\n", d_cache.misses);
     printf("Cache Hit Rate percentage: %0.6f%%\n", ((float)d_cache.hits / (float)(d_cache.hits + d_cache.misses))*100);
