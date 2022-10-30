@@ -8,6 +8,7 @@ char *trace_file_name;
 
 struct L1Cache
 {
+    //intialization
     unsigned valid_field[1024];
     unsigned dirty_field[1024];
     uint64_t tag_field[1024];
@@ -27,8 +28,7 @@ struct L2Cache
 };
 
 uint64_t convert_address(char memory_addr[])
-/* Converts the physical 32-bit address in the trace file to the "binary" \\
- * (a uint64 that can have bitwise operations on it) */
+//converting physical address to binary
 {
     uint64_t binary = 0;
     int i = 0;
@@ -77,6 +77,7 @@ uint64_t convert_address(char memory_addr[])
 
 int isDataExistsInCacheL1(uint64_t address, int nway, struct L1Cache *l1)
 {
+    //cache data L1
     uint64_t block_addr = address >> (unsigned)log2(64);
     int setNumber = block_addr % 512;
     uint64_t tag = block_addr >> (unsigned)log2(512);
@@ -96,6 +97,7 @@ int isDataExistsInCacheL1(uint64_t address, int nway, struct L1Cache *l1)
 }
 int isDataExistsInCacheL2(uint64_t address, int nway, struct L2Cache *l2)
 {
+    //cache data L2
     uint64_t block_addr = address >> (unsigned)log2(64);
     int setNumber = block_addr % 2048;
     uint64_t tag = block_addr >> (unsigned)log2(2048);
@@ -115,6 +117,7 @@ int isDataExistsInCacheL2(uint64_t address, int nway, struct L2Cache *l2)
 }
 void insertDataInL1Cache(uint64_t address, int nway, struct L1Cache *l1)
 {
+    //inserting data into L1 cache
     uint64_t block_addr = address >> (unsigned)log2(64);
     int setNumber = block_addr % 512;
     uint64_t tag = block_addr >> (unsigned)log2(512);
@@ -159,7 +162,7 @@ void insertDataInL1Cache(uint64_t address, int nway, struct L1Cache *l1)
 }
 void insertDataInL2Cache(uint64_t address, int nway, struct L2Cache *l2)
 {
-
+    //inserting data into L2 cache
     uint64_t block_addr = address >> (unsigned)log2(64);
     int setNumber = block_addr % 2048;
     uint64_t tag = block_addr >> (unsigned)log2(2048);
@@ -211,6 +214,7 @@ int main(int argc, char *argv[])
     uint64_t address;
     struct L1Cache l1;
     struct L2Cache l2;
+    //initialization
     int numberOfBlocksinl1 = 1024;
     int numberOfBocksinl2 = 16384;
     int l1nway = 2;
